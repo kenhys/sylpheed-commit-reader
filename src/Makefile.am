@@ -1,10 +1,21 @@
+if USE_WEBKITGTK
+HTML_CFLAGS=`pkg-config --cflags webkit-1.0`
+HTML_LIBS=`pkg-config --libs webkit-1.0`
+endif
+
+if USE_GTKHTML
+HTML_CFLAGS=`pkg-config --cflags libgtkhtml-3.14`
+HTML_LIBS=`pkg-config --libs libgtkhtml-3.14`
+endif
+
 lib_LTLIBRARIES = commit_reader.la
 
 commit_reader_la_SOURCES = commit_reader.c
-commit_reader_la_LDFLAGS = -module -no-undefined -avoid-version
+commit_reader_la_LDFLAGS = -module -no-undefined -avoid-version $(HTML_LIBS)
 
 INCLUDES = \
 	$(GTK_CFLAGS) \
+	$(HTML_CFLAGS) \
 	-I$(includedir) \
 	-I$(sylpheed_build_dir) \
 	-I$(sylpheed_build_dir)/libsylph \
