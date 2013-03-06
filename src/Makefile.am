@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = commit_reader.la
 
-commit_reader_la_SOURCES = sylicons.c sylicons.h ui.c
+commit_reader_la_SOURCES = commit_reader.c
 commit_reader_la_LDFLAGS = -module -no-undefined -avoid-version
 
 INCLUDES = \
