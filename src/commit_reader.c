@@ -117,7 +117,7 @@ static void exec_commit_reader_menu_cb(void)
 
   switch (response) {
   case GTK_RESPONSE_OK:
-    save_htmlview_preference(&SYLPF_OPTION);
+    save_commit_reader_preference(&SYLPF_OPTION);
     break;
   case GTK_RESPONSE_CANCEL:
   default:
