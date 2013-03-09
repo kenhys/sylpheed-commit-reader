@@ -8,9 +8,14 @@ HTML_CFLAGS=`pkg-config --cflags libgtkhtml-3.14`
 HTML_LIBS=`pkg-config --libs libgtkhtml-3.14`
 endif
 
+sylpf_srcdir = $(top_srcdir)/../sylplugin_factory/src
+
 lib_LTLIBRARIES = commit_reader.la
 
-commit_reader_la_SOURCES = commit_reader.c
+commit_reader_la_SOURCES = commit_reader.c \
+        $(sylpf_srcdir)/sylplugin_factory.c \
+        $(sylpf_srcdir)/sylplugin_factory.h
+
 commit_reader_la_LDFLAGS = -module -no-undefined -avoid-version $(HTML_LIBS)
 
 INCLUDES = \
