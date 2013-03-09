@@ -286,10 +286,10 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   char **to_list;
   gsize n_to_items;
   GError error;
-  FILE *msg_file, *input;
   gchar *html_buf, *text_buf;
   gint i;
-  MimeInfo *mimeinfo, *partial;
+  MimeInfo *mimeinfo;
+  GList* hl;
 #if defined(USE_WEBKITGTK)
   WebKitWebSettings *settings = NULL;
 #elif defined(USE_GTKHTML)
@@ -334,8 +334,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
   SYLPF_DEBUG_STR("msg_path", msg_path);
 
-  GList* hl = procheader_get_header_list_from_file(msg_path);
-  gchar *path = NULL;
+  hl = procheader_get_header_list_from_file(msg_path);
 
   to_list = SYLPF_GET_RC_STRING_LIST(SYLPF_OPTION.rcfile,
                                      COMMIT_READER,
