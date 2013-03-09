@@ -134,7 +134,8 @@ static GtkWidget *create_preference_dialog(CommitReaderOption *option)
   GtkWidget *vbox, *hbox;
   GtkWidget *dialog;
   GtkWidget *window;
-  
+  GtkWidget *notebook;
+
   SYLPF_START_FUNC;
 
 
@@ -153,7 +154,7 @@ static GtkWidget *create_preference_dialog(CommitReaderOption *option)
   gtk_container_add(GTK_CONTAINER(hbox), vbox);
   gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
 
-  GtkWidget *notebook = gtk_notebook_new();
+  notebook = gtk_notebook_new();
   create_config_main_page(notebook, SYLPF_OPTION.rcfile);
   create_config_about_page(notebook, SYLPF_OPTION.rcfile);
 
@@ -171,7 +172,8 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 {
   GtkWidget *vbox;
   GtkWidget *private, *image, *scripts, *switch_tab;
-  
+  GtkWidget *label;
+
   SYLPF_START_FUNC;
 
   if (notebook == NULL){
@@ -228,8 +230,8 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 
   save_option_rcfile();
 
-  GtkWidget *general_lbl = gtk_label_new(_("General"));
-  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, general_lbl);
+  label = gtk_label_new(_("General"));
+  gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, label);
   gtk_widget_show_all(notebook);
 
   SYLPF_RETURN_VALUE(vbox);
