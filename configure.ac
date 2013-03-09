@@ -95,7 +95,7 @@ AC_CONFIG_FILES([Makefile
                  src/Makefile])
 AC_OUTPUT
 echo ""
-echo "  For HTML Preview..."
+echo "  For Commit Reader Preview..."
 echo ""
 echo "    WebKitGTK: ${enable_webkitgtk}"
 echo "      GtkHTML: ${enable_gtkhtml}"
