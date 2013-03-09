@@ -4,5 +4,5 @@ enable-private-browsing=false
 auto-load-images=false
 enable-scripts=false
 switch-tab=true
-commit-to=commit@example.com,commit2@example.com
+commit-to=commit@example.com;commit2@example.com
 diff2html="python /usr/local/bin/diff2html.py"
