@@ -133,8 +133,6 @@ static GtkWidget *create_preference_dialog(CommitReaderOption *option)
 {
   GtkWidget *vbox, *hbox;
   GtkWidget *dialog;
-  gint width, height;
-  gpointer mainwin;
   GtkWidget *window;
   
   SYLPF_START_FUNC;
