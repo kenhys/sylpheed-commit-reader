@@ -306,25 +306,25 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 #endif
   
   if (!msgview) {
-    SYLPF_DEBUG_STR("msgview is NULL");
+    SYLPF_WARN_MSG("msgview is NULL");
     return;
   }
 
   messageview = (MessageView*)msgview;
   if (!messageview) {
-    SYLPF_DEBUG_STR("messageview is NULL");
+    SYLPF_WARN_MSG("messageview is NULL");
     return;
   }
 
   headerview = messageview->headerview;
   if (!headerview) {
-    SYLPF_DEBUG_STR("headerview is NULL");
+    SYLPF_WARN_MSG("headerview is NULL");
     return;
   }
 
   hbox = headerview->hbox;
   if (!hbox) {
-    SYLPF_DEBUG_STR("headerview hbox is NULL");
+    SYLPF_WARN_MSG("headerview hbox is NULL");
     return;
   }
 
