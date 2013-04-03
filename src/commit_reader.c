@@ -232,6 +232,8 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 #endif
   TOGGLE_STATE(switch_tab, switch_tab_flag);
 
+#undef TOGGLE_STATE
+
   save_option_rcfile();
 
   label = gtk_label_new(_("General"));
