@@ -137,9 +137,12 @@ static GtkWidget *create_preference_dialog(CommitReaderOption *option)
   GtkWidget *dialog;
   GtkWidget *window;
   GtkWidget *notebook;
-
+  gpointer mainwin;
+  
   SYLPF_START_FUNC;
 
+  mainwin = syl_plugin_main_window_get();
+  window = ((MainWindow*)mainwin)->window;
 
   dialog = gtk_dialog_new_with_buttons(_("CommitReader"),
                                        GTK_WINDOW(window),
@@ -364,6 +367,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
         if (SYLPF_OPTION.html_view == NULL) {
           SYLPF_OPTION.html_view = create_htmlview(GTK_NOTEBOOK(messageview->notebook));
+#endif
         }
         text_buf = sylpf_get_text_from_message_partial(msginfo, MIME_TEXT);
         
