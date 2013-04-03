@@ -10,13 +10,14 @@ AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE($PACKAGE_NAME, $PACKAGE_VERSION)
 
+AC_DEFINE([SYLPF_ID], [PACKAGE_NAME], [""])
+AC_DEFINE([SYLPF_OPTION], [commit_reader_option], [""])
+
 # Checks for programs.
 AC_PROG_AWK
 AC_PROG_CC
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
-
-
 
 AC_ARG_ENABLE(debug,
 	      [AS_HELP_STRING([--enable-debug],
