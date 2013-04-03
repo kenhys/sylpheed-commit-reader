@@ -51,6 +51,7 @@ gulong app_exit_handler_id = 0;
 void plugin_load(void)
 {
   gpointer mainwin;
+  void *option;
 
   syl_init_gettext(COMMIT_READER, "lib/locale");
   g_print("sylicons plug-in loaded!\n");
@@ -70,7 +71,8 @@ void plugin_load(void)
   syl_plugin_signal_connect("messageview-show",
                             G_CALLBACK(messageview_show_cb), NULL);
 
-  sylpf_load_option_rcfile((SylPluginFactoryOption*)&SYLPF_OPTION,
+  option = &SYLPF_OPTION;
+  sylpf_load_option_rcfile((SylPluginFactoryOption*)option,
                            COMMIT_READER_RC);
 }
 
@@ -173,6 +175,7 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   GtkWidget *vbox;
   GtkWidget *private, *image, *scripts, *switch_tab;
   GtkWidget *label;
+  void *option;
 
   SYLPF_START_FUNC;
 
@@ -207,7 +210,8 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
   gtk_box_pack_start(GTK_BOX(vbox), scripts, FALSE, FALSE, 0);
 #endif
 
-  sylpf_load_option_rcfile((SylPluginFactoryOption*)&SYLPF_OPTION,
+  option = &SYLPF_OPTION;
+  sylpf_load_option_rcfile((SylPluginFactoryOption*)option,
                            COMMIT_READER_RC);
 
 #if USE_WEBKITGTK
