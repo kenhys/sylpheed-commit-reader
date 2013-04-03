@@ -23,11 +23,11 @@
 #define gettext_noop(String) (String)
 */
 
+#undef PLUGIN_NAME
 #define PLUGIN_NAME N_("CommitReader Plug-in")
-#define PLUGIN_DESC N_("Support to read every commit mail, every day")
 
-#define SYLPF_ID "commit_reader"
-#define SYLPF_OPTION commit_reader_option
+#undef PLUGIN_DESC
+#define PLUGIN_DESC N_("Support to read every commit mail, every day")
 
 #define ENABLE_PRIVATE_BROWSING "enable-private-browsing"
 #define ENABLE_IMAGES "auto-load-images"
