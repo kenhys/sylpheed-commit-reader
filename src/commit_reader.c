@@ -292,7 +292,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   gchar *msg_path;
   char **to_list;
   gsize n_to_items;
-  GError error;
+  GError *error;
   gchar *html_buf, *text_buf;
   gint i;
   MimeInfo *mimeinfo;
