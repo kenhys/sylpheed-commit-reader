@@ -13,8 +13,8 @@ sylpf_srcdir = $(top_srcdir)/../sylplugin_factory/src
 lib_LTLIBRARIES = commit_reader.la
 
 commit_reader_la_SOURCES = commit_reader.c \
-        $(sylpf_srcdir)/sylplugin_factory.c \
-        $(sylpf_srcdir)/sylplugin_factory.h
+        $(sylplugin_factory_source_dir)/sylplugin_factory.c \
+        $(sylplugin_factory_source_dir)/sylplugin_factory.h
 
 commit_reader_la_LDFLAGS = -module -no-undefined -avoid-version $(HTML_LIBS)
 
@@ -24,7 +24,8 @@ INCLUDES = \
 	-I$(includedir) \
 	-I$(sylpheed_build_dir) \
 	-I$(sylpheed_build_dir)/libsylph \
-	-I$(sylpheed_build_dir)/src
+	-I$(sylpheed_build_dir)/src \
+	-I$(sylplugin_factory_source_dir)/src
 
 commit_reader_la_LIBADD = \
 	$(GTK_LIBS) \
