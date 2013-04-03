@@ -298,8 +298,10 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   GError *error;
   gchar *html_buf, *text_buf;
   gint i;
-  MimeInfo *mimeinfo;
+  MimeInfo *mimeinfo, *partial;
   GSList* hl;
+  FILE *msg_file, *input = NULL;
+  size_t n_size;
 #if defined(USE_WEBKITGTK)
   WebKitWebSettings *settings = NULL;
 #elif defined(USE_GTKHTML)
@@ -344,6 +346,58 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
   SYLPF_DEBUG_STR("msg_path", msg_path);
 
+  mimeinfo = procmime_scan_message(msginfo);
+  msg_file = procmsg_open_message(msginfo);
+
+  if (SYLPF_OPTION.html_view == NULL) {
+#if defined(USE_WEBKITGTK)
+    SYLPF_OPTION.html_view = (WebKitWebView*)create_htmlview(GTK_NOTEBOOK(messageview->notebook));
+#elif defined(USE_WEBKITGTK)
+    SYLPF_OPTION.html_view = create_htmlview(GTK_NOTEBOOK(messageview->notebook));
+#endif
+  }
+
+  partial = mimeinfo;
+  while (partial && partial->mime_type != MIME_TEXT_HTML) {
+    partial = procmime_mimeinfo_next(partial);
+  }
+
+  if (partial && partial->mime_type == MIME_TEXT_HTML) {
+    
+    partial->mime_type = MIME_TEXT;
+
+    input = procmime_get_text_content(partial, msg_file, NULL);
+
+    html_buf = calloc(partial->size+1, 1);
+
+    n_size = fread(html_buf, partial->size, 1, input);
+
+#if defined(USE_WEBKITGTK)
+    settings = webkit_web_view_get_settings(SYLPF_OPTION.html_view);
+
+    g_object_set(G_OBJECT(settings), ENABLE_IMAGES, SYLPF_OPTION.image_flag, NULL);
+    g_object_set(G_OBJECT(settings), ENABLE_SCRIPTS, SYLPF_OPTION.script_flag, NULL);
+    g_object_set(G_OBJECT(settings), ENABLE_PRIVATE_BROWSING, SYLPF_OPTION.private_flag, NULL);
+
+    g_object_set(G_OBJECT(settings), DEFAULT_FONT_SIZE, SYLPF_OPTION.font_size, NULL);
+
+    webkit_web_view_set_settings(SYLPF_OPTION.html_view, settings);
+
+    webkit_web_view_load_string(SYLPF_OPTION.html_view, html_buf, NULL, NULL, "");
+
+#elif defined(USE_GTKHTML)
+    gtk_html_load_from_string(GTK_HTML(SYLPF_OPTION.html_view), html_buf, -1);
+#endif
+
+    if (SYLPF_OPTION.switch_tab_flag != FALSE) {
+      gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 2);
+    }
+
+    fclose(input);
+    free(html_buf);
+    return;
+  }
+
   hl = procheader_get_header_list_from_file(msg_path);
 
   to_list = SYLPF_GET_RC_STRING_LIST(SYLPF_OPTION.rcfile,
@@ -365,13 +419,6 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
       if (strcmp(msginfo->to, to_list[i]) == 0) {
         SYLPF_DEBUG_STR("matched to 'commit-to'", msginfo->to);
 
-        if (SYLPF_OPTION.html_view == NULL) {
-#if defined(USE_WEBKITGTK)
-          SYLPF_OPTION.html_view = (WebKitWebView*)create_htmlview(GTK_NOTEBOOK(messageview->notebook));
-#elif defined(USE_WEBKITGTK)
-          SYLPF_OPTION.html_view = create_htmlview(GTK_NOTEBOOK(messageview->notebook));
-#endif
-        }
         text_buf = sylpf_get_text_from_message_partial(msginfo, MIME_TEXT);
         
         SYLPF_DEBUG_STR("text/plain", text_buf);
