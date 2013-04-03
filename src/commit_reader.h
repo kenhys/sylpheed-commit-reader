@@ -13,7 +13,7 @@
 #ifdef USE_GTKHTML
 #endif
 
-#include "../../sylplugin_factory/src/sylplugin_factory.h"
+#include "sylplugin_factory.h"
 
 #define COMMIT_READER "commit_reader"
 #define COMMIT_READER_RC "commitreaderrc"
