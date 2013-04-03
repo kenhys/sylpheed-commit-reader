@@ -36,6 +36,8 @@
 #define ENABLE_SWITCH_TAB "switch-tab"
 #define DEFAULT_FONT_SIZE "default-font-size"
 
+#define BOOL_TOSTRING(value) (value) ? "TRUE" : "FALSE"
+
 /*#define GET_RC_BOOLEAN(keyarg) g_key_file_get_boolean(g_opt.rcfile, COMMIT_READER, keyarg, NULL)*/
 
 typedef struct _CommitReaderOption CommitReaderOption;
