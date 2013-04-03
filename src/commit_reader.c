@@ -234,7 +234,8 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 
 #undef TOGGLE_STATE
 
-  save_option_rcfile();
+  // TODO
+  //save_option_rcfile();
 
   label = gtk_label_new(_("General"));
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, label);
@@ -440,7 +441,8 @@ static void save_commit_reader_preference(CommitReaderOption *option)
 #endif
   SYLPF_SET_RC_BOOLEAN(ENABLE_SWITCH_TAB, SYLPF_OPTION.switch_tab_flag);
 
-  save_option_rcfile();
+  // TODO
+  //save_option_rcfile();
 
 #undef TOGGLE_STATE
 
