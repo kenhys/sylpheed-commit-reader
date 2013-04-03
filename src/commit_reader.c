@@ -296,7 +296,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   gchar *html_buf, *text_buf;
   gint i;
   MimeInfo *mimeinfo;
-  GList* hl;
+  GSList* hl;
 #if defined(USE_WEBKITGTK)
   WebKitWebSettings *settings = NULL;
 #elif defined(USE_GTKHTML)
