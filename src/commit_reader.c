@@ -410,6 +410,8 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
 static void save_commit_reader_preference(CommitReaderOption *option)
 {
+  void *sylpf_option;
+
   SYLPF_START_FUNC;
 
 #define TOGGLE_STATE(widget) \
@@ -431,7 +433,8 @@ static void save_commit_reader_preference(CommitReaderOption *option)
 
 #undef TOGGLE_STATE
   
-  sylpf_load_option_rcfile((SylPluginFactoryOption*)&SYLPF_OPTION,
+  sylpf_option = option;
+  sylpf_load_option_rcfile((SylPluginFactoryOption*)sylpf_option,
                            COMMIT_READER_RC);
   
 #if USE_WEBKITGTK
