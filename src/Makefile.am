@@ -13,8 +13,8 @@ sylpf_srcdir = $(top_srcdir)/../sylplugin_factory/src
 lib_LTLIBRARIES = commit_reader.la
 
 commit_reader_la_SOURCES = commit_reader.c \
-        $(sylplugin_factory_source_dir)/sylplugin_factory.c \
-        $(sylplugin_factory_source_dir)/sylplugin_factory.h
+        $(sylplugin_factory_source_dir)/src/sylplugin_factory.c \
+        $(sylplugin_factory_source_dir)/src/sylplugin_factory.h
 
 commit_reader_la_LDFLAGS = -module -no-undefined -avoid-version $(HTML_LIBS)
 
