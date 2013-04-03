@@ -366,6 +366,9 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
         SYLPF_DEBUG_STR("matched to 'commit-to'", msginfo->to);
 
         if (SYLPF_OPTION.html_view == NULL) {
+#if defined(USE_WEBKITGTK)
+          SYLPF_OPTION.html_view = (WebKitWebView*)create_htmlview(GTK_NOTEBOOK(messageview->notebook));
+#elif defined(USE_WEBKITGTK)
           SYLPF_OPTION.html_view = create_htmlview(GTK_NOTEBOOK(messageview->notebook));
 #endif
         }
