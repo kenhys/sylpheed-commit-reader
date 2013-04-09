@@ -353,7 +353,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   FILE *msg_file, *input = NULL;
   size_t n_size;
   GtkWidget *comment_button;
-
+  gboolean not_found;
 #if defined(USE_WEBKITGTK)
   WebKitWebSettings *settings = NULL;
 #elif defined(USE_GTKHTML)
@@ -362,6 +362,8 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 #endif
   
   SYLPF_START_FUNC;
+
+  not_found = TRUE;
 
 #if DEBUG
   g_print("[DEBUG] sylicons: %p: messageview_show (%p), all_headers: %d: %s\n",
@@ -454,6 +456,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
       comment_button = create_comment_button();
       gtk_box_pack_end(GTK_BOX(hbox), comment_button, FALSE, FALSE, 0);
     }
+    not_found = FALSE;
     gtk_widget_show(comment_button);
     return;
   }
@@ -469,6 +472,9 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
   if (!to_list) {
     SYLPF_WARN_MSG("key commit-to not found in rc file");
+    if (comment_button) {
+      gtk_widget_show(comment_button);
+    }
     return;
   }
 
@@ -517,12 +523,17 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
           comment_button = create_comment_button();
           gtk_box_pack_end(GTK_BOX(hbox), comment_button, FALSE, FALSE, 0);
         }
+        not_found = FALSE;
         gtk_widget_show(comment_button);
       }
 
     }
   }
   g_strfreev(to_list);
+
+  if (not_found && comment_button) {
+    gtk_widget_hide(comment_button);
+  }
 
   SYLPF_END_FUNC;
 }
