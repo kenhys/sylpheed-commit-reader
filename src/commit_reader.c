@@ -301,7 +301,7 @@ static GtkWidget *create_comment_button()
 
   SYLPF_START_FUNC;
 
-  button = gtk_button_new_from_stock(GTK_STOCK_EDIT);
+  button = gtk_button_new();
 
   pixbuf = gdk_pixbuf_new_from_xpm_data((const char **)comment_edit);
   image = gtk_image_new_from_pixbuf(pixbuf);
