@@ -34,6 +34,8 @@
 #include "copying.h"
 #include "commit_reader.h"
 
+#include "../res/comment_edit.xpm"
+
 static SylPluginInfo info = {
   N_(PLUGIN_NAME),
   "0.1.0",
@@ -294,10 +296,16 @@ static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
 static GtkWidget *create_comment_button()
 {
   GtkWidget *button;
+  GdkPixbuf *pixbuf;
+  GtkWidget *image;
 
   SYLPF_START_FUNC;
 
   button = gtk_button_new_from_stock(GTK_STOCK_EDIT);
+
+  pixbuf = gdk_pixbuf_new_from_xpm_data((const char **)comment_edit);
+  image = gtk_image_new_from_pixbuf(pixbuf);
+  gtk_button_set_image(GTK_BUTTON(button), image);
 
   g_object_set(G_OBJECT(button),
                "name", "commit-comment-button", NULL);
