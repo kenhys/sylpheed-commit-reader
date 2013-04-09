@@ -76,6 +76,8 @@ void plugin_load(void)
   option = &SYLPF_OPTION;
   sylpf_load_option_rcfile((SylPluginFactoryOption*)option,
                            COMMIT_READER_RC);
+  SYLPF_OPTION.font_size = SYLPF_GET_RC_INTEGER(SYLPF_OPTION.rcfile, SYLPF_ID, "default-font-size");
+  
 }
 
 void plugin_unload(void)
