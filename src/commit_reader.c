@@ -352,6 +352,8 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   GSList* hl;
   FILE *msg_file, *input = NULL;
   size_t n_size;
+  GtkWidget *comment_button;
+
 #if defined(USE_WEBKITGTK)
   WebKitWebSettings *settings = NULL;
 #elif defined(USE_GTKHTML)
@@ -391,6 +393,8 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   }
 
   wl = gtk_container_get_children(GTK_CONTAINER(hbox));
+
+  comment_button = get_commit_comment_button(hbox);
 
   msg_path = procmsg_get_message_file_path(msginfo);
 
@@ -445,6 +449,12 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
     fclose(input);
     free(html_buf);
+
+    if (!comment_button) {
+      comment_button = create_comment_button();
+      gtk_box_pack_end(GTK_BOX(hbox), comment_button, FALSE, FALSE, 0);
+    }
+    gtk_widget_show(comment_button);
     return;
   }
 
@@ -503,6 +513,11 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
         
         if (SYLPF_OPTION.switch_tab_flag != FALSE) {
         }
+        if (!comment_button) {
+          comment_button = create_comment_button();
+          gtk_box_pack_end(GTK_BOX(hbox), comment_button, FALSE, FALSE, 0);
+        }
+        gtk_widget_show(comment_button);
       }
 
     }
