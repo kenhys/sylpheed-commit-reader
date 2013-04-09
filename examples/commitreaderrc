@@ -5,3 +5,5 @@ auto-load-images=false
 enable-scripts=false
 switch-tab=true
 commit-to=commit@example.com;commit2@example.com
+daily-report=/home/user/sample.txt
+template=/home/user/template.txt
