@@ -308,6 +308,31 @@ static GtkWidget *create_comment_button()
   SYLPF_RETURN_VALUE(button);
 }
 
+static GtkWidget *get_commit_comment_button(GtkWidget *box)
+{
+  GtkWidget *widget;
+  GtkWidget *comment_button;
+  GList *widget_list;
+  int index;
+  gchar *name;
+
+  SYLPF_START_FUNC;
+
+  comment_button = NULL;
+  widget_list = gtk_container_get_children(GTK_CONTAINER(box));
+
+  for (index = 0; index < g_list_length(widget_list); index++) {
+    widget = g_list_nth_data(widget_list, index);
+    if (GTK_IS_BUTTON(widget)) {
+      g_object_get(G_OBJECT(widget), "name", &name);
+      if (strcmp(name, "commit-comment-button") == 0) {
+        comment_button = widget;
+      }
+      g_free(name);
+    }
+  }
+  SYLPF_RETURN_VALUE(comment_button);
+}
 
 
 static void messageview_show_cb(GObject *obj, gpointer msgview,
