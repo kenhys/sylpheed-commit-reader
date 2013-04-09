@@ -105,6 +105,12 @@ static void app_exit_cb(GObject *obj, gpointer data)
   SYLPF_END_FUNC;
 }
 
+static void commit_comment_button_cb(GObject *obj, gpointer data)
+{
+  SYLPF_START_FUNC;
+  SYLPF_END_FUNC;
+}
+
 static void exec_commit_reader_menu_cb(void)
 {
   GtkWidget *dialog;
@@ -284,6 +290,25 @@ static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
 
   SYLPF_RETURN_VALUE(NULL);
 }
+
+static GtkWidget *create_comment_button()
+{
+  GtkWidget *button;
+
+  SYLPF_START_FUNC;
+
+  button = gtk_button_new_from_stock(GTK_STOCK_EDIT);
+
+  g_object_set(G_OBJECT(button),
+               "name", "commit-comment-button", NULL);
+
+  g_signal_connect(G_OBJECT(button), "clicked",
+                   G_CALLBACK(commit_comment_button_cb), NULL);
+
+  SYLPF_RETURN_VALUE(button);
+}
+
+
 
 static void messageview_show_cb(GObject *obj, gpointer msgview,
 				MsgInfo *msginfo, gboolean all_headers)
