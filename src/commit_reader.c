@@ -324,7 +324,7 @@ static GtkWidget *get_commit_comment_button(GtkWidget *box)
   for (index = 0; index < g_list_length(widget_list); index++) {
     widget = g_list_nth_data(widget_list, index);
     if (GTK_IS_BUTTON(widget)) {
-      g_object_get(G_OBJECT(widget), "name", &name);
+      g_object_get(G_OBJECT(widget), "name", &name, NULL);
       if (strcmp(name, "commit-comment-button") == 0) {
         comment_button = widget;
       }
