@@ -77,7 +77,9 @@ void plugin_load(void)
   sylpf_load_option_rcfile((SylPluginFactoryOption*)option,
                            COMMIT_READER_RC);
   SYLPF_OPTION.font_size = SYLPF_GET_RC_INTEGER(SYLPF_OPTION.rcfile, SYLPF_ID, "default-font-size");
+  SYLPF_OPTION.hide_folderview_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_HIDE_FOLDERVIEW);
   
+  SYLPF_DEBUG_VAL("hide-folderview", SYLPF_OPTION.hide_folderview_flag);
 }
 
 void plugin_unload(void)
@@ -100,6 +102,9 @@ gint plugin_interface_version(void)
 static void init_done_cb(GObject *obj, gpointer data)
 {
   SYLPF_START_FUNC;
+
+  sylpf_update_folderview_visibility(!SYLPF_OPTION.hide_folderview_flag);
+
   SYLPF_END_FUNC;
 }
 

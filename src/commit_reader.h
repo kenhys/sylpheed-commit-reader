@@ -31,6 +31,8 @@
 #define ENABLE_SWITCH_TAB "switch-tab"
 #define DEFAULT_FONT_SIZE "default-font-size"
 
+#define ENABLE_HIDE_FOLDERVIEW "hide-folderview"
+
 #define BOOL_TOSTRING(value) (value) ? "TRUE" : "FALSE"
 
 /*#define GET_RC_BOOLEAN(keyarg) g_key_file_get_boolean(g_opt.rcfile, COMMIT_READER, keyarg, NULL)*/
@@ -68,6 +70,8 @@ struct _CommitReaderOption {
 
   gboolean show_attach_tab_flag;
   gint attach_toolbutton_pos;
+
+  gboolean hide_folderview_flag;
 
   gint font_size;
 
