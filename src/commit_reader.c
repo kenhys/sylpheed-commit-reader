@@ -45,6 +45,8 @@ static SylPluginInfo info = {
 
 CommitReaderOption SYLPF_OPTION;
 
+static MsgInfo *current_msginfo;
+
 static void init_done_cb(GObject *obj, gpointer data);
 static void app_exit_cb(GObject *obj, gpointer data);
 
@@ -80,6 +82,8 @@ void plugin_load(void)
   SYLPF_OPTION.hide_folderview_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_HIDE_FOLDERVIEW);
   
   SYLPF_DEBUG_VAL("hide-folderview", SYLPF_OPTION.hide_folderview_flag);
+
+  current_msginfo = NULL;
 }
 
 void plugin_unload(void)
@@ -116,8 +120,61 @@ static void app_exit_cb(GObject *obj, gpointer data)
 
 static void commit_comment_button_cb(GObject *obj, gpointer data)
 {
+  GtkWidget *dialog;
+  MsgInfo *msginfo;
+  gint response;
+
   SYLPF_START_FUNC;
+
+  msginfo = (MsgInfo*)data;
+  g_return_if_fail(msginfo != NULL);
+  
+  dialog = create_comment_dialog(&SYLPF_OPTION, msginfo);
+  
+  gtk_widget_show_all(dialog);
+  response = gtk_dialog_run(GTK_DIALOG(dialog));
+
+  switch (response) {
+  case GTK_RESPONSE_OK:
+    break;
+  case GTK_RESPONSE_CANCEL:
+  default:
+    break;
+  }
+
+  gtk_widget_destroy(dialog);
+
   SYLPF_END_FUNC;
+}
+
+static GtkWidget *create_comment_dialog(CommitReaderOption *option, MsgInfo* msginfo)
+{
+  GtkWidget *vbox, *hbox;
+  GtkWidget *dialog;
+  gpointer mainwin;
+  GtkWidget *window;
+
+  SYLPF_START_FUNC;
+
+  mainwin = syl_plugin_main_window_get();
+  window = ((MainWindow*)mainwin)->window;
+
+  dialog = gtk_dialog_new_with_buttons(_(PLUGIN_NAME),
+                                       GTK_WINDOW(window),
+                                       GTK_DIALOG_MODAL,
+                                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                       GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                       NULL);
+
+  sylpf_init_preference_dialog_size(dialog);
+
+  vbox = gtk_vbox_new(FALSE, SYLPF_BOX_SPACE);
+  hbox = gtk_hbox_new(TRUE, SYLPF_BOX_SPACE);
+
+  gtk_container_add(GTK_CONTAINER(hbox), vbox);
+  gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
+
+  SYLPF_RETURN_VALUE(dialog);
 }
 
 static void exec_commit_reader_menu_cb(void)
@@ -318,7 +375,7 @@ static GtkWidget *create_comment_button()
                "name", "commit-comment-button", NULL);
 
   g_signal_connect(G_OBJECT(button), "clicked",
-                   G_CALLBACK(commit_comment_button_cb), NULL);
+                   G_CALLBACK(commit_comment_button_cb), current_msginfo);
 
   SYLPF_RETURN_VALUE(button);
 }
@@ -370,6 +427,8 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   gboolean not_found;
   
   SYLPF_START_FUNC;
+
+  current_msginfo = msginfo;
 
   not_found = TRUE;
 
