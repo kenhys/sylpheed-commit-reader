@@ -369,12 +369,6 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   size_t n_size;
   GtkWidget *comment_button;
   gboolean not_found;
-#if defined(USE_WEBKITGTK)
-  WebKitWebSettings *settings = NULL;
-#elif defined(USE_GTKHTML)
-#else
-#error "Not Implemented"
-#endif
   
   SYLPF_START_FUNC;
 
@@ -443,22 +437,8 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
     n_size = fread(html_buf, partial->size, 1, input);
 
-#if defined(USE_WEBKITGTK)
-    settings = webkit_web_view_get_settings(SYLPF_OPTION.html_view);
+    load_html_to_widget(SYLPF_OPTION.html_view, html_buf);
 
-    g_object_set(G_OBJECT(settings), ENABLE_IMAGES, SYLPF_OPTION.image_flag, NULL);
-    g_object_set(G_OBJECT(settings), ENABLE_SCRIPTS, SYLPF_OPTION.script_flag, NULL);
-    g_object_set(G_OBJECT(settings), ENABLE_PRIVATE_BROWSING, SYLPF_OPTION.private_flag, NULL);
-
-    g_object_set(G_OBJECT(settings), DEFAULT_FONT_SIZE, SYLPF_OPTION.font_size, NULL);
-
-    webkit_web_view_set_settings(SYLPF_OPTION.html_view, settings);
-
-    webkit_web_view_load_string(SYLPF_OPTION.html_view, html_buf, NULL, NULL, "");
-
-#elif defined(USE_GTKHTML)
-    gtk_html_load_from_string(GTK_HTML(SYLPF_OPTION.html_view), html_buf, -1);
-#endif
 
     if (SYLPF_OPTION.switch_tab_flag != FALSE) {
       gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 2);
@@ -506,24 +486,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
         html_buf = sylpf_format_diff2html_text(text_buf);
           
-#if defined(USE_WEBKITGTK)
-        settings = webkit_web_view_get_settings(SYLPF_OPTION.html_view);
-
-        g_object_set(G_OBJECT(settings), ENABLE_IMAGES, SYLPF_OPTION.image_flag, NULL);
-        g_object_set(G_OBJECT(settings), ENABLE_SCRIPTS, SYLPF_OPTION.script_flag, NULL);
-        g_object_set(G_OBJECT(settings), ENABLE_PRIVATE_BROWSING, SYLPF_OPTION.private_flag, NULL);
-
-        g_object_set(G_OBJECT(settings), DEFAULT_FONT_SIZE, SYLPF_OPTION.font_size, NULL);
-
-        webkit_web_view_set_settings(SYLPF_OPTION.html_view, settings);
-
-        webkit_web_view_load_string(SYLPF_OPTION.html_view, html_buf, NULL, NULL, "");
-
-#elif defined(USE_GTKHTML)
-        gtk_html_load_from_string(GTK_HTML(SYLPF_OPTION.html_view), html_buf, -1);
-#else
-#error "use WebKitGTK or GtkHTML"
-#endif
+        load_html_to_widget(SYLPF_OPTION.html_view, html_buf);
 
         g_free(text_buf);
 
@@ -551,6 +514,41 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   }
 
   SYLPF_END_FUNC;
+}
+
+static void load_html_to_widget(gpointer widget, gchar *html)
+{
+#if defined(USE_WEBKITGTK)
+  WebKitWebView *html_view;
+  WebKitWebSettings *settings = NULL;
+#elif defined(USE_GTKHTML)
+#error "Not Implemented"
+#else
+#error "Not Implemented"
+#endif
+
+#if defined(USE_WEBKITGTK)
+  html_view = (WebKitWebView*)widget;
+  
+  settings = webkit_web_view_get_settings(html_view);
+
+  g_object_set(G_OBJECT(settings),
+               ENABLE_IMAGES, SYLPF_OPTION.image_flag, NULL);
+  g_object_set(G_OBJECT(settings),
+               ENABLE_SCRIPTS, SYLPF_OPTION.script_flag, NULL);
+  g_object_set(G_OBJECT(settings),
+               ENABLE_PRIVATE_BROWSING, SYLPF_OPTION.private_flag, NULL);
+
+  g_object_set(G_OBJECT(settings),
+               DEFAULT_FONT_SIZE, SYLPF_OPTION.font_size, NULL);
+
+  webkit_web_view_set_settings(html_view, settings);
+
+  webkit_web_view_load_string(html_view, html, NULL, NULL, "");
+
+#elif defined(USE_GTKHTML)
+  gtk_html_load_from_string(GTK_HTML(html_view), html, -1);
+#endif
 }
 
 static void save_commit_reader_preference(CommitReaderOption *option)
