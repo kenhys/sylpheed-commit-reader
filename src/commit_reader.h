@@ -17,11 +17,6 @@
 
 #define COMMIT_READER "commit_reader"
 #define COMMIT_READER_RC "commitreaderrc"
-/*
-#define _(String)   dgettext(COMMIT_READER, String)
-#define N_(String)  gettext_noop(String)
-#define gettext_noop(String) (String)
-*/
 
 #undef PLUGIN_NAME
 #define PLUGIN_NAME N_("CommitReader Plug-in")
