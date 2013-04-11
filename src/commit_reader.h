@@ -91,5 +91,6 @@ static GtkWidget *create_htmlview(GtkNotebook *notebook);
 static void messageview_change_view_type(MessageView *messageview,
                                          MessageType type);
 static void load_html_to_widget(gpointer widget, gchar *html);
+static gboolean is_commit_mail_address_list(MsgInfo *msginfo, char **to_list, gsize n_to_items);
 
 #endif /* __COMMIT_READER_H__ */

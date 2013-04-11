@@ -362,7 +362,6 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   gsize n_to_items;
   GError *error;
   gchar *html_buf, *text_buf;
-  gint i;
   MimeInfo *mimeinfo, *partial;
   GSList* hl;
   FILE *msg_file, *input = NULL;
@@ -473,40 +472,36 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
     return;
   }
 
-  for (i = 0; i < n_to_items; i++) {
-    if (msginfo && msginfo->to && to_list[i]) {
-      SYLPF_DEBUG_STR("msginfo->to", msginfo->to);
-      SYLPF_DEBUG_STR("to_list[i]", to_list[i]);
-      if (strcmp(msginfo->to, to_list[i]) == 0) {
-        SYLPF_DEBUG_STR("matched to 'commit-to'", msginfo->to);
+  if (is_commit_mail_address_list(msginfo, to_list, n_to_items)) {
+  
+    SYLPF_DEBUG_STR("matched to 'commit-to'", msginfo->to);
 
-        text_buf = sylpf_get_text_from_message_partial(msginfo, MIME_TEXT);
+    text_buf = sylpf_get_text_from_message_partial(msginfo, MIME_TEXT);
         
-        SYLPF_DEBUG_STR("text/plain", text_buf);
+    SYLPF_DEBUG_STR("text/plain", text_buf);
 
-        html_buf = sylpf_format_diff2html_text(text_buf);
+    html_buf = sylpf_format_diff2html_text(text_buf);
           
-        load_html_to_widget(SYLPF_OPTION.html_view, html_buf);
+    load_html_to_widget(SYLPF_OPTION.html_view, html_buf);
 
-        g_free(text_buf);
+    g_free(text_buf);
 
-        mimeinfo = procmime_scan_message(msginfo);
+    mimeinfo = procmime_scan_message(msginfo);
 
-        messageview_change_view_type(messageview, MVIEW_MIME);
-        gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 2);
+    messageview_change_view_type(messageview, MVIEW_MIME);
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(messageview->notebook), 2);
         
-        if (SYLPF_OPTION.switch_tab_flag != FALSE) {
-        }
-        if (!comment_button) {
-          comment_button = create_comment_button();
-          gtk_box_pack_end(GTK_BOX(hbox), comment_button, FALSE, FALSE, 0);
-        }
-        not_found = FALSE;
-        gtk_widget_show(comment_button);
-      }
-
+    if (SYLPF_OPTION.switch_tab_flag != FALSE) {
     }
+    if (!comment_button) {
+      comment_button = create_comment_button();
+      gtk_box_pack_end(GTK_BOX(hbox), comment_button, FALSE, FALSE, 0);
+    }
+    not_found = FALSE;
+    gtk_widget_show(comment_button);
   }
+  
+
   g_strfreev(to_list);
 
   if (not_found && comment_button) {
@@ -514,6 +509,27 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   }
 
   SYLPF_END_FUNC;
+}
+
+static gboolean is_commit_mail_address_list(MsgInfo *msginfo, char **to_list, gsize n_to_items)
+{
+  gint i;
+  gboolean matched;
+
+  SYLPF_START_FUNC;
+
+  matched = FALSE;
+  for (i = 0; i < n_to_items; i++) {
+    if (msginfo && msginfo->to && to_list[i]) {
+      SYLPF_DEBUG_STR("msginfo->to", msginfo->to);
+      SYLPF_DEBUG_STR("to_list[i]", to_list[i]);
+      if (strcmp(msginfo->to, to_list[i]) == 0) {
+        matched = TRUE;
+        break;
+      }
+    }
+  }
+  SYLPF_RETURN_VALUE(matched);
 }
 
 static void load_html_to_widget(gpointer widget, gchar *html)
