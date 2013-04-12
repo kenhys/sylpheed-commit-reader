@@ -80,6 +80,7 @@ void plugin_load(void)
                            COMMIT_READER_RC);
   SYLPF_OPTION.font_size = SYLPF_GET_RC_INTEGER(SYLPF_OPTION.rcfile, SYLPF_ID, "default-font-size");
   SYLPF_OPTION.hide_folderview_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_HIDE_FOLDERVIEW);
+  SYLPF_OPTION.switch_tab_flag = SYLPF_GET_RC_BOOLEAN(ENABLE_SWITCH_TAB);
   
   SYLPF_DEBUG_VAL("hide-folderview", SYLPF_OPTION.hide_folderview_flag);
 
