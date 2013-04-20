@@ -49,6 +49,7 @@ static MsgInfo *current_msginfo;
 
 static void init_done_cb(GObject *obj, gpointer data);
 static void app_exit_cb(GObject *obj, gpointer data);
+static gboolean is_commit_mail(GSList *header_list);
 
 gulong app_exit_handler_id = 0;
 
@@ -517,6 +518,10 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
 
   hl = procheader_get_header_list_from_file(msg_path);
 
+  if (!is_commit_mail(hl)) {
+    return;
+  }
+
   to_list = SYLPF_GET_RC_STRING_LIST(SYLPF_OPTION.rcfile,
                                      COMMIT_READER,
                                      "commit-to",
@@ -540,7 +545,8 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
         
     SYLPF_DEBUG_STR("text/plain", text_buf);
 
-    html_buf = sylpf_format_diff2html_text(text_buf);
+    /* html_buf = sylpf_format_diff2html_text(text_buf); */
+    html_buf = sylpf_format_gitcommitmailer_text(text_buf);
           
     load_html_to_widget(SYLPF_OPTION.html_view, html_buf);
 
@@ -569,6 +575,30 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   }
 
   SYLPF_END_FUNC;
+}
+
+static gboolean is_commit_mail(GSList *header_list)
+{
+  gboolean result;
+  gint index;
+  Header *header;
+
+  SYLPF_START_FUNC;
+
+  result = FALSE;
+
+  for (index = 0; index < g_slist_length(header_list); index++) {
+    header = (Header *)g_slist_nth_data(header_list, index);
+    if (header && header->name && header->body) {
+      SYLPF_DEBUG_STR("header->name", header->name);
+      if (strcasecmp(header->name, "X-Mailer") == 0) {
+        result = g_str_has_prefix(header->body, "GitCommitMailer");
+        break;
+      }
+    }
+  }
+
+  SYLPF_RETURN_VALUE(result);
 }
 
 static gboolean is_commit_mail_address_list(MsgInfo *msginfo, char **to_list, gsize n_to_items)
