@@ -248,7 +248,10 @@ static GtkWidget *create_preference_dialog(CommitReaderOption *option)
 static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 {
   GtkWidget *vbox;
-  GtkWidget *private, *image, *scripts, *switch_tab;
+#if USE_WEBKITGTK
+  GtkWidget *private, *image, *scripts;
+#endif
+  GtkWidget *switch_tab;
   GtkWidget *label;
   void *option;
 
@@ -475,7 +478,7 @@ static void messageview_show_cb(GObject *obj, gpointer msgview,
   if (SYLPF_OPTION.html_view == NULL) {
 #if defined(USE_WEBKITGTK)
     SYLPF_OPTION.html_view = (WebKitWebView*)create_htmlview(GTK_NOTEBOOK(messageview->notebook));
-#elif defined(USE_WEBKITGTK)
+#elif defined(USE_GTKHTML)
     SYLPF_OPTION.html_view = create_htmlview(GTK_NOTEBOOK(messageview->notebook));
 #endif
   }
@@ -626,7 +629,7 @@ static void load_html_to_widget(gpointer widget, gchar *html)
   WebKitWebView *html_view;
   WebKitWebSettings *settings = NULL;
 #elif defined(USE_GTKHTML)
-#error "Not Implemented"
+  GtkWidget *html_view;
 #else
 #error "Not Implemented"
 #endif
@@ -651,6 +654,7 @@ static void load_html_to_widget(gpointer widget, gchar *html)
   webkit_web_view_load_string(html_view, html, NULL, NULL, "");
 
 #elif defined(USE_GTKHTML)
+  html_view = widget;
   gtk_html_load_from_string(GTK_HTML(html_view), html, -1);
 #endif
 }
