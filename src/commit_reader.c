@@ -109,8 +109,6 @@ static void init_done_cb(GObject *obj, gpointer data)
 {
   SYLPF_START_FUNC;
 
-  sylpf_update_folderview_visibility(!SYLPF_OPTION.hide_folderview_flag);
-
   SYLPF_END_FUNC;
 }
 
