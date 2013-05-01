@@ -93,5 +93,9 @@ static void messageview_change_view_type(MessageView *messageview,
 static void load_html_to_widget(gpointer widget, gchar *html);
 static gboolean is_commit_mail_address_list(MsgInfo *msginfo, char **to_list, gsize n_to_items);
 static GtkWidget *create_comment_dialog(CommitReaderOption *option, MsgInfo* msginfo);
+static void create_comment_input_field(void);
+
+static void commit_comment_input_cb(GObject *obj, gpointer data);
+static void commit_comment_clear_cb(GObject *obj, gpointer data);
 
 #endif /* __COMMIT_READER_H__ */

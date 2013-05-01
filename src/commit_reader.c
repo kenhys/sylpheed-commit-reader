@@ -86,6 +86,8 @@ void plugin_load(void)
   SYLPF_DEBUG_VAL("hide-folderview", SYLPF_OPTION.hide_folderview_flag);
 
   current_msginfo = NULL;
+
+  create_comment_input_field();
 }
 
 void plugin_unload(void)
@@ -782,3 +784,60 @@ static void messageview_change_view_type(MessageView *messageview,
   }
   messageview->type = type;
 }
+
+static void create_comment_input_field(void)
+{
+  GtkWidget *statusbar;
+  GtkWidget *hbox;
+  GtkWidget *comment;
+  GtkWidget *clear;
+  GtkWidget *input;
+
+  SYLPF_START_FUNC;
+
+  statusbar = syl_plugin_main_window_get_statusbar();
+
+  hbox = gtk_hbox_new(FALSE, 0);
+  input = gtk_entry_new();
+  comment = gtk_button_new_from_stock(GTK_STOCK_EDIT);
+  clear = gtk_button_new_from_stock(GTK_STOCK_CLEAR);
+
+  gtk_box_pack_start(GTK_BOX(hbox),
+                     input, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(hbox),
+                     comment, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(hbox),
+                     clear, FALSE, FALSE, 0);
+
+  g_signal_connect(G_OBJECT(comment), "clicked",
+                   G_CALLBACK(commit_comment_input_cb), input);
+  g_signal_connect(G_OBJECT(clear), "clicked",
+                   G_CALLBACK(commit_comment_clear_cb), input);
+
+  g_object_set(G_OBJECT(hbox),
+               "name", "commit_reader_comment", NULL);
+
+  gtk_box_pack_end(GTK_BOX(statusbar),
+                   hbox, TRUE, TRUE, 0);
+
+  gtk_widget_show_all(hbox);
+
+  SYLPF_END_FUNC;
+}
+
+static void commit_comment_input_cb(GObject *obj, gpointer data)
+{
+}
+
+static void commit_comment_clear_cb(GObject *obj, gpointer data)
+{
+  GtkWidget *widget;
+
+  SYLPF_START_FUNC;
+
+  widget = data;
+  gtk_entry_set_text(GTK_ENTRY(widget), "");
+
+  SYLPF_END_FUNC;
+}
+
