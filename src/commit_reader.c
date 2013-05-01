@@ -594,7 +594,13 @@ static gboolean is_commit_mail(GSList *header_list)
       SYLPF_DEBUG_STR("header->name", header->name);
       if (strcasecmp(header->name, "X-Mailer") == 0) {
         result = g_str_has_prefix(header->body, "GitCommitMailer");
-        break;
+        if (result)
+          break;
+      }
+      if (strcasecmp(header->name, "Sender") == 0) {
+        result = g_str_has_prefix(header->body, "null+git-utils@clear-code.com");
+        if (result)
+          break;
       }
     }
   }
