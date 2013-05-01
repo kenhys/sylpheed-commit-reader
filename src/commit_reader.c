@@ -827,6 +827,36 @@ static void create_comment_input_field(void)
 
 static void commit_comment_input_cb(GObject *obj, gpointer data)
 {
+  GtkWidget *widget;
+  const gchar *text;
+  gchar *filename;
+  gchar *content;
+  gchar *comment;
+  gsize length;
+
+  SYLPF_START_FUNC;
+
+  widget = data;
+  text = gtk_entry_get_text(GTK_ENTRY(widget));
+  g_return_if_fail(text != NULL);
+
+  filename = g_key_file_get_string(SYLPF_OPTION.rcfile,
+                                   COMMIT_READER,
+                                   "daily-report",
+                                   NULL);
+  g_file_get_contents(filename, &content, NULL,
+                      NULL);
+  SYLPF_DEBUG_STR("content", content);
+
+  if (content) {
+    comment = g_strdup_printf("%s  %s\n", content, text);
+  } else {
+    comment = g_strdup_printf("  %s\n", text);
+  }
+  length = strlen(comment);
+  g_file_set_contents(filename, comment, length, NULL);
+
+  SYLPF_END_FUNC;
 }
 
 static void commit_comment_clear_cb(GObject *obj, gpointer data)
