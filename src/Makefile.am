@@ -8,6 +8,8 @@ HTML_CFLAGS=`pkg-config --cflags libgtkhtml-3.14`
 HTML_LIBS=`pkg-config --libs libgtkhtml-3.14`
 endif
 
+AUTOMAKE_OPTIONS = subdir-objects
+
 sylpf_srcdir = $(top_srcdir)/../sylplugin_factory/src
 
 lib_LTLIBRARIES = commit_reader.la
