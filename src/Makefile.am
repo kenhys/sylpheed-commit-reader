@@ -20,7 +20,7 @@ commit_reader_la_SOURCES = commit_reader.c \
 
 commit_reader_la_LDFLAGS = -module -no-undefined -avoid-version $(HTML_LIBS)
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	$(GTK_CFLAGS) \
 	$(HTML_CFLAGS) \
 	-I$(includedir) \
